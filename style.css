@@ -1,0 +1,26 @@
+a.just-an-admin-button {
+	position: fixed;
+	bottom: 150px;
+	left: 20px;
+	
+	background: #fff url('admin.jpg') top left no-repeat;
+	display: block;
+	
+	width: 30px;
+	height: 30px;
+	
+	background-size:30px 30px;
+	background-repeat:no-repeat;
+	
+	z-index: 999999;
+}
+a.just-an-admin-button span {
+	padding: 5px;
+	font-size: 28px;
+	font-weight: bold;
+	display: block;
+	
+	color: #000;
+	position: absolute;
+	left: -10000px;
+}
