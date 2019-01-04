@@ -16,17 +16,15 @@ wp_enqueue_style( 'just-an-admin-button-css', plugins_url( 'style.css' , __FILE_
 */
 add_filter('show_admin_bar', '__return_false');
 
-
 /*
  Show the button, if the user is logged in
 */
 function justAnAdminButton()
 {
-	if ( is_user_logged_in() && !is_admin() ) 
-	{ 
+	if ( is_user_logged_in() && !is_admin() )
+	{
 		echo '<a href="'.admin_url().'" class="just-an-admin-button"><span>A</span></a>';
-	}  
+	}
 }
-
 add_action('wp_footer', 'justAnAdminButton', 1);
 ?>
