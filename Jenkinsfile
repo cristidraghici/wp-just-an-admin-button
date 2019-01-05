@@ -2,9 +2,8 @@ pipeline {
   agent {
     dockerfile {
       filename './docker/Dockerfile'
+      label 'builder'
     }
-
-    label 'builder'
   }
 
   parameters {
@@ -12,7 +11,7 @@ pipeline {
   }
 
   environment {
-    LEVEL = params.release_type
+    LEVEL = "${params.release_type}"
     STEP = 'init'
   }
 
@@ -21,10 +20,14 @@ pipeline {
       steps {
         patch = sh (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)
         if (patch) { LEVEL = 'patch' }
+      }
 
+      steps {
         minor = sh (script: "git log -1 | grep '\\[release minor\\]'", returnStatus: true)
         if (patch) { LEVEL = 'minor' }
+      }
 
+      steps {
         major = sh (script: "git log -1 | grep '\\[release major\\]'", returnStatus: true)
         if (patch) { LEVEL = 'major' }
       }
