@@ -3,11 +3,17 @@ pipeline {
     dockerfile {
       filename './docker/Dockerfile'
     }
+
     label 'builder'
   }
 
+  parameters {
+    string(name: 'release_type', defaultValue: 'patch', description: 'The release type: `major` `minor` `patch`')
+  }
+
   environment {
-    LEVEL = 'patch'
+    LEVEL = params.release_type
+    STEP = 'init'
   }
 
   stages {
@@ -25,7 +31,17 @@ pipeline {
     }
 
     stage('Create a new release on the repository') {
-      when { branch 'master' }
+      when {
+        branch 'master'
+
+        expression {
+          STEP == 'init'
+        }
+
+        expression {
+          LEVEL == 'patch' || LEVEL == 'minor' || LEVEL == 'major'
+        }
+      }
 
       steps {
         echo 'Building..'
@@ -34,17 +50,29 @@ pipeline {
       steps {
         sh "./cli.sh release $LEVEL"
       }
+
+      steps {
+        STEP = 'release'
+      }
     }
 
     stage('Publish the new release to the Wordpress plugin repository') {
-      when { branch 'master' }
+      when {
+        expression {
+          STEP == 'release'
+        }
+      }
 
       steps {
-        echo 'Testing..'
+        echo 'Publishing..'
       }
 
       steps {
         sh "./cli.sh publish"
+      }
+
+      steps {
+        STEP = 'publish'
       }
     }
   }
