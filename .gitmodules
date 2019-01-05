@@ -1,0 +1,5 @@
+[submodule "lib/versiontag"]
+	path = lib/versiontag
+	url = git@github.com:franiglesias/versiontag.git
+	ignore = all
+	branch = master

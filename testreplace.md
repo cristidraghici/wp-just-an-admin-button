@@ -2,7 +2,7 @@
 
 Replaces the administration toolbar with a button leading to the administration section.
 
-Current version: 1.0.0
+Current version: 2.0.0
 
 ## Releasing a new version
 

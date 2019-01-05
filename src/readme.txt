@@ -14,7 +14,7 @@ Just an admin button hides the top admin toolbar shown when logged in and previe
 
 == Installation ==
 
-Upload the Just an admin button plugin to your blog, Activate it, then you're done!
+Upload the "Just an admin button" plugin to your blog, Activate it, then you're done!
 
 == Changelog ==
 
