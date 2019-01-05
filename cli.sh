@@ -43,6 +43,14 @@ function default_error {
   echo "Error encountered";
   exit 1;
 }
+# Replace some text in a file
+function replace_text_in_file {
+  local search=$1;
+  local replace=$2;
+  local file=$3;
+  echo "${file} -> ${search} -> ${replace}"
+  sed -i "" "s/${search}/${replace}/g" "${file}";
+}
 
 # Include .env if it exists
 ENV="$PROJECT/.env"

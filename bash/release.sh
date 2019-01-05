@@ -51,13 +51,6 @@ echo "> New version: v$NEW_VERSION";
 #
 # Add the new version in the plugin files
 #
-function update_version {
-  local search=$1;
-  local replace=$2;
-  local file=$3;
-  echo "${file} -> ${search} -> ${replace}"
-  sed -i "" "s/${search}/${replace}/g" "${file}";
-}
 
 echo "> Replacing version in repository files...";
 
@@ -65,17 +58,29 @@ echo "> Replacing version in repository files...";
 LINE="Stable tag: $VERSION"
 REPLACE="Stable tag: $NEW_VERSION"
 FILE="$PROJECT/src/readme.txt"
-update_version "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "$LINE" "$REPLACE" "$FILE";
 # just-an-admin-button.php
 LINE="Version: $VERSION"
 REPLACE="Version: $NEW_VERSION"
 FILE="$PROJECT/src/just-an-admin-button.php"
-update_version "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "$LINE" "$REPLACE" "$FILE";
 # README.md
 LINE="Current version: $VERSION"
 REPLACE="Current version: $NEW_VERSION"
 FILE="$PROJECT/README.md"
-update_version "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "$LINE" "$REPLACE" "$FILE";
+
+# Copy a placeholder of the entry script for the users who will download the plugin directly from github.com
+SOURCE="$PROJECT/src/just-an-admin-button.php"
+DEST="$PROJECT/plugin.php"
+cp $SOURCE $DEST;
+sed -i "" '/line-used-to-generate-placeholder-entry-file.*/,$ d' $DEST
+echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>" >> $DEST;
+
+# Hack to update from wordpress after install
+LINE="Version: $NEW_VERSION"
+REPLACE="Version: 0.0.1"
+replace_text_in_file "$LINE" "$REPLACE" "$DEST";
 
 #
 # Update the repo
