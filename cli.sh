@@ -28,6 +28,27 @@ function file_exists {
 		return
 	fi
 }
+function directory_exists {
+	if [ -d "$1" ]; then
+		# exists
+		echo -e 1
+	else
+		# does not
+		# echo -e 0
+		return
+	fi
+}
+# Default error
+function default_error {
+  echo "Error encountered";
+  exit 1;
+}
+
+# Include .env if it exists
+ENV="$PROJECT/.env"
+if [[ $(file_exists "$ENV") ]]; then
+  export $(grep -v '^#' $ENV | xargs)  > /dev/null 2>&1
+fi
 
 # Get which script to execute
 CURRENT_SCRIPT="$1"

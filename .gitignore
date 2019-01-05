@@ -1,2 +1,4 @@
+.env
+build
 docker/mariadb/data
 docker/wordpress/public_html

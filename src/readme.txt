@@ -1,8 +1,8 @@
 === Just an admin button ===
 Contributors: cristidraghici
-Tags: hidden admin toolbar
+Tags: hidden admin toolbar, hide administration toolbar
 Requires at least: 3.7
-Tested up to: 4.9
+Tested up to: 5.0.2
 Stable tag: 1.0.2
 License: GPLv3 or later
 
@@ -17,6 +17,10 @@ Just an admin button hides the top admin toolbar shown when logged in and previe
 Upload the "Just an admin button" plugin to your blog, Activate it, then you're done!
 
 == Changelog ==
+
+= 1.0.3 =
+
+* Added Docker, submodules, bash scripts for automation
 
 = 1.0.0 =
 

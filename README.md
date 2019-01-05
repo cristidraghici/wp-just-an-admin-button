@@ -10,6 +10,11 @@ Use `./cli.sh release` to automatically create a tag for the repo and add it in 
 
 Publishing to the Wordpress plugin repository will be done by `./cli.sh publish` , which can be run in a jenkins build.
 
+## .env
+
+- copy `.env.example` to `.env`;
+- `WP_ORG_USERNAME` can be manually added `WP_ORG_PASSWORD`, if not stored in the automation system credentials management;
+
 ## Docker development
 
 For developing, you can use `docker-compose`:
