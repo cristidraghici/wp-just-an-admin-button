@@ -3,7 +3,7 @@ Contributors: cristidraghici
 Tags: hidden admin toolbar
 Requires at least: 3.7
 Tested up to: 4.9
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 License: GPLv3 or later
 
 Hide the admin bar when previewing your site

@@ -81,9 +81,13 @@ update_version "$LINE" "$REPLACE" "$FILE";
 # Update the repo
 #
 
+git add .
+git commit -m "Updated versions"
+git push
+
 echo "> Updating the repository...";
 
-git tag "v$NEW_VERSION";
+git tag -a "v$NEW_VERSION" -m "Version v$NEW_VERSION";
 
 updateSemverFile
 
