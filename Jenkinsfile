@@ -12,24 +12,26 @@ pipeline {
 
   environment {
     LEVEL = "${params.release_type}"
-    STEP = 'init'
+    STEP = "init"
   }
 
   stages {
     stage('Parse the input') {
-      steps {
-        patch = sh (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)
-        if (patch) { LEVEL = 'patch' }
-      }
+      parallel {
+        steps {
+          patch = sh (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)
+          if (patch) { LEVEL = 'patch' }
+        }
 
-      steps {
-        minor = sh (script: "git log -1 | grep '\\[release minor\\]'", returnStatus: true)
-        if (patch) { LEVEL = 'minor' }
-      }
+        steps {
+          minor = sh (script: "git log -1 | grep '\\[release minor\\]'", returnStatus: true)
+          if (patch) { LEVEL = 'minor' }
+        }
 
-      steps {
-        major = sh (script: "git log -1 | grep '\\[release major\\]'", returnStatus: true)
-        if (patch) { LEVEL = 'major' }
+        steps {
+          major = sh (script: "git log -1 | grep '\\[release major\\]'", returnStatus: true)
+          if (patch) { LEVEL = 'major' }
+        }
       }
     }
 
@@ -47,15 +49,8 @@ pipeline {
       }
 
       steps {
-        echo 'Building..'
-      }
-
-      steps {
-        sh "./cli.sh release $LEVEL"
-      }
-
-      steps {
         STEP = 'release'
+        sh "./cli.sh release $LEVEL"
       }
     }
 
@@ -67,15 +62,8 @@ pipeline {
       }
 
       steps {
-        echo 'Publishing..'
-      }
-
-      steps {
-        sh "./cli.sh publish"
-      }
-
-      steps {
         STEP = 'publish'
+        sh "./cli.sh publish"
       }
     }
   }
