@@ -15,7 +15,7 @@ pipeline {
 
   stages {
     stage('Parse the input') {
-      paralel {
+      parallel {
         steps {
           if (sh (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)) { LEVEL = 'patch' }
         }
