@@ -14,11 +14,12 @@ pipeline {
         checkout scm
         sh "chmod +x ./cli.sh"
       }
+
       steps {
         if (env.BRANCH_NAME != 'master') {
           echo 'Branch must be master for build to work.';
           exit 1;
-        fi
+        }
       }
     }
 
@@ -64,7 +65,10 @@ pipeline {
 
     stage('Publish') {
       steps {
-        withCredentials([string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'), string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')]) {
+        withCredentials([
+          string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'),
+          string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
+        ]) {
           checkout scm
           sh "./cli.sh publish"
         }
