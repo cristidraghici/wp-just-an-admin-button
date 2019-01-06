@@ -4,3 +4,7 @@ FROM alpine:3.6
 RUN apk add --no-cache subversion && \
     apk add --no-cache git && \
     apk add --no-cache bash
+
+# Set the workdir
+RUN mkdir -p /app
+WORKDIR /app
