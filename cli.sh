@@ -61,8 +61,13 @@ fi
 CURRENT_SCRIPT="$1"
 
 # Include the runner
+
+echo "yeees3";
 if [[ $(file_exists "$PROJECT/bash/$CURRENT_SCRIPT.sh") ]]; then
+  echo "yeees2";
   . "$PROJECT/bash/$CURRENT_SCRIPT.sh";
 fi
+
+echo "yeees";
 
 exit 0;
