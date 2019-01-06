@@ -37,28 +37,29 @@ if [ $error == 0 ]; then
 fi
 
 # Clean and set the workdir/build directory
-NEW_PLUGIN_SRC="$PROJECT/src/*"
+NEW_PLUGIN_SRC="$PROJECT/src"
 WORK_DIR_PATH="$PROJECT/$WORK_DIR"
 
 PLUGIN_PATH="$PROJECT/$WORK_DIR/$PLUGIN"
 SVN_PATH="$PROJECT/$WORK_DIR/svn"
 
 rm -fR "$WORK_DIR_PATH"
+
+mkdir -p "$WORK_DIR_PATH"
 mkdir -p "$PLUGIN_PATH"
 
 # Go to the workdir and get the svn repo
 svn co -q "http://svn.wp-plugins.org/$PLUGIN" "$SVN_PATH" || default_error
 
 # Copy the plugin files
-cp -r "$NEW_PLUGIN_SRC" "$PLUGIN_PATH"
-ls -la
+cp -r "$NEW_PLUGIN_SRC/*" "$PLUGIN_PATH"
 
 # Move out the trunk directory to a temp location
 mv "$SVN_PATH/trunk" "$WORK_DIR_PATH/svn-trunk"
 
 # Make the necessary changes
 ## new trunk
-cp -r "$PLUGIN_PATH" "$SVN_PATH/trunk"
+mv "$PLUGIN_PATH" "$SVN_PATH/trunk"
 ## new assets
 mv "$SVN_PATH/trunk/assets" "$SVN_PATH/assets"
 ## new tag
