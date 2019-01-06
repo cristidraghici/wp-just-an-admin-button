@@ -1,21 +1,18 @@
-#!/usr/bin/env groovy
-
 pipeline {
   agent {
     dockerfile {
       filename './docker/Dockerfile'
       label 'builder'
     }
-  }
 
+  }
   stages {
     stage('Prepare') {
       steps {
-        echo "Branch check is done in the scripts run."
-        echo "To save resources, this should be moved to jenkins"
+        echo 'Branch check is done in the scripts run.'
+        echo 'To save resources, this should be moved to jenkins'
       }
     }
-
     stage('Release') {
       parallel {
         stage('default') {
@@ -28,9 +25,10 @@ pipeline {
             expression {
               sh(script: "git log -1 | grep 'release patch'", returnStatus: true) == true
             }
+
           }
           steps {
-            sh  "./cli.sh release patch"
+            sh './cli.sh release patch'
           }
         }
         stage('minor') {
@@ -38,9 +36,10 @@ pipeline {
             expression {
               sh(script: "git log -1 | grep 'release minor'", returnStatus: true) == true
             }
+
           }
           steps {
-            sh  "./cli.sh release minor"
+            sh './cli.sh release minor'
           }
         }
         stage('major') {
@@ -48,32 +47,32 @@ pipeline {
             expression {
               sh(script: "git log -1 | grep 'release major'", returnStatus: true) == true
             }
+
           }
           steps {
-            sh  "./cli.sh release major"
+            sh './cli.sh release major'
           }
         }
       }
     }
-
     stage('Publish') {
       steps {
-        withCredentials([
-          string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'),
-          string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
-        ]) {
-          checkout scm
-          sh "cp .env.example .env"
-          sh "chmod +x ./cli.sh"
-          sh "./cli.sh publish"
+        withCredentials(bindings: [
+                    string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'),
+                    string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
+                  ]) {
+            checkout scm
+            sh 'cp .env.example .env'
+            sh 'chmod +x ./cli.sh'
+            sh './cli.sh publish'
+          }
+
         }
       }
-    }
-
-    stage('Finish') {
-      steps {
-        echo 'Operation completed...'
+      stage('Finish') {
+        steps {
+          echo 'Operation completed...'
+        }
       }
     }
   }
-}
