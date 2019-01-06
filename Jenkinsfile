@@ -14,21 +14,23 @@ pipeline {
 
   stages {
     stage('Prepare') {
-      stage('branch') {
-        when {
-          expression {
-            BRANCH != 'master'
+      parallel {
+        stage('branch') {
+          when {
+            expression {
+              BRANCH != 'master'
+            }
+          }
+          steps {
+            echo 'Branch must be master for build to work.';
+            exit 1;
           }
         }
-        steps {
-          echo 'Branch must be master for build to work.';
-          exit 1;
-        }
-      }
-      stage('checkout') {
-        steps {
-          checkout scm
-          sh "chmod +x ./cli.sh"
+        stage('checkout') {
+          steps {
+            checkout scm
+            sh "chmod +x ./cli.sh"
+          }
         }
       }
     }
