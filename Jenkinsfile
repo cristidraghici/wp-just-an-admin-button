@@ -10,11 +10,9 @@ pipeline {
 
   stages {
     stage('Prepare') {
-      stage('info') {
-        steps {
-          echo "Branch check is done in the scripts run."
-          echo "To save resources, this should be moved to jenkins"
-        }
+      steps {
+        echo "Branch check is done in the scripts run."
+        echo "To save resources, this should be moved to jenkins"
       }
     }
 
