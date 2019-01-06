@@ -9,6 +9,7 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
   exit;
 fi
 
+echo "debug 1";
 # Set the current path
 PROJECT=$PWD
 
@@ -51,6 +52,7 @@ function replace_text_in_file {
   sed -i "" "s/${search}/${replace}/g" "${file}";
 }
 
+echo "debug 2";
 # Include .env if it exists
 ENV="$PROJECT/.env"
 if [[ $(file_exists "$ENV") ]]; then
