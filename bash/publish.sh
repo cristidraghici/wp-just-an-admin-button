@@ -37,22 +37,25 @@ if [ $error == 0 ]; then
 fi
 
 # Clean and set the workdir/build directory
-NEW_PLUGIN_SRC="$PROJECT/src"
-WORK_DIR_PATH="$PROJECT/$WORK_DIR"
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
 
-PLUGIN_PATH="$PROJECT/$WORK_DIR/$PLUGIN"
-SVN_PATH="$PROJECT/$WORK_DIR/svn"
+NEW_PLUGIN_SRC=$(realpath "$PROJECT/src/")
+WORK_DIR_PATH=$(realpath "$PROJECT/$WORK_DIR")
+PLUGIN_PATH=$(realpath "$PROJECT/$WORK_DIR/$PLUGIN")
+SVN_PATH=$(realpath "$PROJECT/$WORK_DIR/svn")
 
 rm -fR "$WORK_DIR_PATH"
 
 mkdir -p "$WORK_DIR_PATH"
 mkdir -p "$PLUGIN_PATH"
 
+# Copy the plugin files
+cp -r "$NEW_PLUGIN_SRC" "$PLUGIN_PATH"
+
 # Go to the workdir and get the svn repo
 svn co -q "http://svn.wp-plugins.org/$PLUGIN" "$SVN_PATH" || default_error
-
-# Copy the plugin files
-cp -r "$NEW_PLUGIN_SRC/*" "$PLUGIN_PATH"
 
 # Move out the trunk directory to a temp location
 mv "$SVN_PATH/trunk" "$WORK_DIR_PATH/svn-trunk"
@@ -64,7 +67,7 @@ mv "$PLUGIN_PATH" "$SVN_PATH/trunk"
 mv "$SVN_PATH/trunk/assets" "$SVN_PATH/assets"
 ## new tag
 mkdir -p "$SVN_PATH/trunk/tags/$VERSION"
-cp -r "$SVN_PATH/trunk/*" "$SVN_PATH/trunk/tags/$VERSION"
+cp "$SVN_PATH/trunk/" "$SVN_PATH/trunk/tags/$VERSION"
 
 # Copy all the .svn folders from the checked out copy of trunk to the new trunk
 cd "$WORK_DIR_PATH/svn-trunk"
