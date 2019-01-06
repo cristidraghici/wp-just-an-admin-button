@@ -7,6 +7,13 @@ pipeline {
   }
 
   stages {
+    stage('Prepare') {
+      steps {
+        sh "checkout scm"
+        sh "chmod +x ./cli.sh"
+      }
+    }
+
     stage('Release') {
       parallel {
         stage('default') {
