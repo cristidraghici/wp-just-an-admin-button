@@ -14,19 +14,6 @@ pipeline {
   }
 
   stages {
-    stage('Parse the input') {
-      parallel {
-        steps {
-          if (sh (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)) { LEVEL = 'patch' }
-        }
-        steps {
-          if (sh (script: "git log -1 | grep '\\[release minor\\]'", returnStatus: true)) { LEVEL = 'minor' }
-        }
-        steps {
-          if (sh (script: "git log -1 | grep '\\[release major\\]'", returnStatus: true)) { LEVEL = 'major' }
-        }
-      }
-    }
     stage('Release') {
       steps {
         powershell(script: "./cli.sh release ${LABEL}", returnStdout: true)
