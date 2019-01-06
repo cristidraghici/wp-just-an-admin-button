@@ -5,18 +5,19 @@ pipeline {
       label 'builder'
     }
   }
-  parameters {
-    string(name: 'release_type', defaultValue: 'patch', description: 'The release type: `major` `minor` `patch`')
-  }
-  environment {
-    LEVEL = "${params.release_type}"
-    STEP = "init"
-  }
 
   stages {
     stage('Release') {
       steps {
-        powershell(script: "./cli.sh release ${LABEL}", returnStdout: true)
+        if (powershell (script: "git log -1 | grep '\\[release patch\\]'", returnStatus: true)) {
+          powershell(script: "./cli.sh release patch", returnStdout: true)
+        }
+        if (powershell (script: "git log -1 | grep '\\[release minor\\]'", returnStatus: true)) {
+          powershell(script: "./cli.sh release minor", returnStdout: true)
+        }
+        if (powershell (script: "git log -1 | grep '\\[release major\\]'", returnStatus: true)) {
+          powershell(script: "./cli.sh release major", returnStdout: true)
+        }
       }
     }
     stage('Publish') {
