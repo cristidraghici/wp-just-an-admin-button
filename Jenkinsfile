@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 pipeline {
   agent {
     dockerfile {
@@ -6,11 +8,22 @@ pipeline {
     }
   }
 
+  environment {
+    WP_ORG_USERNAME=`echo $WP_ORG_USERNAME`
+    WP_ORG_PASSWORD=`echo $WP_ORG_PASSWORD`
+  }
+
   stages {
     stage('Prepare') {
       steps {
         checkout scm
         sh "chmod +x ./cli.sh"
+      }
+      steps {
+        if (env.BRANCH_NAME != 'master') {
+          echo 'Branch must be master for build to work.';
+          exit 1;
+        fi
       }
     }
 
