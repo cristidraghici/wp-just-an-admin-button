@@ -8,11 +8,6 @@ pipeline {
     }
   }
 
-  environment {
-    WP_ORG_USERNAME="$WP_ORG_USERNAME"
-    WP_ORG_PASSWORD="$WP_ORG_PASSWORD"
-  }
-
   stages {
     stage('Prepare') {
       steps {
@@ -69,8 +64,10 @@ pipeline {
 
     stage('Publish') {
       steps {
-        checkout scm
-        sh "./cli.sh publish"
+        withCredentials([string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'), string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')]) {
+          checkout scm
+          sh "./cli.sh publish"
+        }
       }
     }
 
