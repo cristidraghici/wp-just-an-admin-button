@@ -7,6 +7,12 @@ pipeline {
   }
 
   stages {
+    stage('Prepare') {
+      steps {
+        sh(script: "chmod +X ${WORKSPACE}/cli.sh", returnStdout: true)
+      }
+    }
+
     stage('Release') {
       parallel {
         stage('default') {
