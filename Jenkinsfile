@@ -17,13 +17,6 @@ pipeline {
             echo "To save resources, this should be moved to jenkins"
           }
         }
-        stage('checkout') {
-          steps {
-            checkout scm
-            sh "cp .env.example .env"
-            sh "chmod +x ./cli.sh"
-          }
-        }
       }
     }
 
@@ -74,6 +67,8 @@ pipeline {
           string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
         ]) {
           checkout scm
+          sh "cp .env.example .env"
+          sh "chmod +x ./cli.sh"
           sh "./cli.sh publish"
         }
       }
