@@ -21,7 +21,10 @@ if [[ -z "$WP_ORG_USERNAME" ]] || [[ -z "$WP_ORG_PASSWORD" ]]; then
 fi
 
 # Get the current version
-VERSION="$(git describe --tags $(git rev-list --tags --max-count=1) | cut -c 2-)"
+VERSION="$(cat .version)"
+if [[ -z "$VERSION" ]]; then
+	VERSION="0.0.1"
+fi
 
 echo "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION";
 

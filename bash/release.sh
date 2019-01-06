@@ -67,6 +67,9 @@ echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>
 # Hack to update from wordpress after install
 replace_text_in_file "Version: $NEW_VERSION" "Version: 0.0.1" "$DEST";
 
+# Save the version in a file
+echo $NEW_VERSION > .version
+
 #
 # Update the repo
 #
