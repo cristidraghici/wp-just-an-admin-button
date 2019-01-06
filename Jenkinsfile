@@ -14,14 +14,22 @@ pipeline {
 
   stages {
     stage('Prepare') {
-      steps {
-        if (BRANCH != 'master') {
+      stage('branch') {
+        when {
+          expression {
+            BRANCH != 'master'
+          }
+        }
+        steps {
           echo 'Branch must be master for build to work.';
           exit 1;
-        } else {}
-
-        checkout scm
-        sh "chmod +x ./cli.sh"
+        }
+      }
+      stage('checkout') {
+        steps {
+          checkout scm
+          sh "chmod +x ./cli.sh"
+        }
       }
     }
 
