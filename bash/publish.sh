@@ -6,6 +6,13 @@ if [ -z ${PROJECT+x} ]; then exit; fi
 # Intro on the function of the file
 echo "Publishing the new release to the Wordpress plugin repository.."
 
+# Check the repo name (loaded from the .env file)
+if [[ -z "$PLUGIN" ]]; then
+	echo "> Plugin name not set" 1>&2;
+  echo "> Aborting.."
+	exit 1;
+fi
+
 # Check WP credentials
 if [[ -z "$WP_ORG_USERNAME" ]] || [[ -z "$WP_ORG_PASSWORD" ]]; then
 	echo "> WordPress.org credentials not set" 1>&2;

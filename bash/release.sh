@@ -59,6 +59,7 @@ replace_text_in_file "Current version: $VERSION" "Current version: $NEW_VERSION"
 # Copy a placeholder of the entry script for the users who will download the plugin directly from github.com
 SOURCE="$PROJECT/src/just-an-admin-button.php"
 DEST="$PROJECT/plugin.php"
+
 cp $SOURCE $DEST;
 sed -i "" '/line-used-to-generate-placeholder-entry-file.*/,$ d' $DEST
 echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>" >> $DEST;
