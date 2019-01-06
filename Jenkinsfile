@@ -21,7 +21,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PATH}/cli.sh release patch", returnStdout: true)
+            sh(script: "${WORKSPACE}/cli.sh release patch", returnStdout: true)
           }
         }
         stage('minor') {
@@ -31,7 +31,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PATH}/cli.sh release minor", returnStdout: true)
+            sh(script: "${WORKSPACE}/cli.sh release minor", returnStdout: true)
           }
         }
         stage('major') {
@@ -41,7 +41,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PATH}/cli.sh release major", returnStdout: true)
+            sh(script: "${WORKSPACE}/cli.sh release major", returnStdout: true)
           }
         }
       }
@@ -49,7 +49,7 @@ pipeline {
 
     stage('Publish') {
       steps {
-        sh(script: "${PATH}/cli.sh publish", returnStdout: true)
+        sh(script: "${WORKSPACE}/cli.sh publish", returnStdout: true)
       }
     }
 
