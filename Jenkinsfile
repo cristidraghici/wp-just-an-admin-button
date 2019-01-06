@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        sh(script: "chmod +X ${WORKSPACE}/cli.sh", returnStdout: true)
+        sh "chmod +x ${WORKSPACE}/cli.sh"
       }
     }
 
@@ -27,7 +27,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${WORKSPACE}/cli.sh release patch", returnStdout: true)
+            sh  "./cli.sh release patch"
           }
         }
         stage('minor') {
@@ -37,7 +37,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${WORKSPACE}/cli.sh release minor", returnStdout: true)
+            sh  "./cli.sh release minor"
           }
         }
         stage('major') {
@@ -47,7 +47,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${WORKSPACE}/cli.sh release major", returnStdout: true)
+            sh  "./cli.sh release major"
           }
         }
       }
@@ -55,7 +55,7 @@ pipeline {
 
     stage('Publish') {
       steps {
-        sh(script: "${WORKSPACE}/cli.sh publish", returnStdout: true)
+        sh  "./cli.sh publish"
       }
     }
 
