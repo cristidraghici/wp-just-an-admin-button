@@ -10,7 +10,7 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-PROJECT='.';
+PROJECT='/app';
 
 #
 # Execute a given script
