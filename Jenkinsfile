@@ -15,20 +15,16 @@ pipeline {
   stages {
     stage('Prepare') {
       parallel {
-        stage('branch') {
-          when {
-            expression {
-              BRANCH != 'master'
-            }
-          }
+        stage('info') {
           steps {
-            echo 'Branch must be master for build to work.';
-            exit 1;
+            echo "Branch check is done in the scripts run."
+            echo "To save resources, this should be moved to jenkins"
           }
         }
         stage('checkout') {
           steps {
             checkout scm
+            sh "cp .env.example .env"
             sh "chmod +x ./cli.sh"
           }
         }
@@ -39,7 +35,7 @@ pipeline {
       parallel {
         stage('default') {
           steps {
-            echo 'Releasing...'
+            echo 'This step is skipped if the commit message does not contain the `release` instruction'
           }
         }
         stage('patch') {

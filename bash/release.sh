@@ -31,44 +31,30 @@ fi
 #
 # Create a new version (use `-f` param to force the creation)
 #
-
 # Overwrite exit
 function exit { echo "exit $@"; }
-
 # New version
 echo '> Dry run is being performed, to get the new version: ';
 . $PROJECT/lib/versiontag/versiontag --dry --force $2
 echo '> Dry run completed';
-
 # Restore exit
 function exit { builtin exit $@; }
 
 # Get the current version
 NEW_VERSION="$major.$minor.$patch"
-
 echo "> New version: v$NEW_VERSION";
 
 #
 # Add the new version in the plugin files
 #
-
 echo "> Replacing version in repository files...";
 
 # readme.txt
-LINE="Stable tag: $VERSION"
-REPLACE="Stable tag: $NEW_VERSION"
-FILE="$PROJECT/src/readme.txt"
-replace_text_in_file "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "Stable tag: $VERSION" "Stable tag: $NEW_VERSION" "$PROJECT/src/readme.txt";
 # just-an-admin-button.php
-LINE="Version: $VERSION"
-REPLACE="Version: $NEW_VERSION"
-FILE="$PROJECT/src/just-an-admin-button.php"
-replace_text_in_file "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "Version: $VERSION" "Version: $NEW_VERSION" "$PROJECT/src/just-an-admin-button.php";
 # README.md
-LINE="Current version: $VERSION"
-REPLACE="Current version: $NEW_VERSION"
-FILE="$PROJECT/README.md"
-replace_text_in_file "$LINE" "$REPLACE" "$FILE";
+replace_text_in_file "Current version: $VERSION" "Current version: $NEW_VERSION" "$PROJECT/README.md";
 
 # Copy a placeholder of the entry script for the users who will download the plugin directly from github.com
 SOURCE="$PROJECT/src/just-an-admin-button.php"
@@ -78,24 +64,18 @@ sed -i "" '/line-used-to-generate-placeholder-entry-file.*/,$ d' $DEST
 echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>" >> $DEST;
 
 # Hack to update from wordpress after install
-LINE="Version: $NEW_VERSION"
-REPLACE="Version: 0.0.1"
-replace_text_in_file "$LINE" "$REPLACE" "$DEST";
+replace_text_in_file "Version: $NEW_VERSION" "Version: 0.0.1" "$DEST";
 
 #
 # Update the repo
 #
-
+echo "> Updating the repository...";
 git add .
-git commit -m "Updated versions"
+git commit -m "Updated versions..."
 git push
 
-echo "> Updating the repository...";
-
+echo "> Creating the tag...";
 git tag -a "v$NEW_VERSION" -m "Version v$NEW_VERSION";
-
-updateSemverFile
-
 git push origin "v$NEW_VERSION";
 
 echo "> Job done";

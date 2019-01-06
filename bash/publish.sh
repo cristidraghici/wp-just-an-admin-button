@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: make sure the ssl of the wp plugin repo is accepted
-
 # Exit if script is run directly
 if [ -z ${PROJECT+x} ]; then exit; fi
 
@@ -15,18 +13,8 @@ if [[ -z "$WP_ORG_USERNAME" ]] || [[ -z "$WP_ORG_PASSWORD" ]]; then
 	exit 1;
 fi
 
-
-# Check git branch (needs to be `master`)
-BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-if [[ "$BRANCH" != "master" ]]; then
-  echo '> The new release can only be created from the `master` branch.';
-  echo '> Aborting..';
-  exit 1;
-fi
-
 # Get the current version
-VERSION_TAG="$($PROJECT/lib/versiontag/versiontag current)"
-VERSION="$(echo "$VERSION_TAG" | cut -c 19-)"
+VERSION="$(git describe | cut -c 2-6)"
 
 # # Check if the tag exists for the version we are building
 TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")

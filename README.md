@@ -10,7 +10,9 @@ Note: Installing from github.com, **could result in an error** when trying to ac
 
 Use `./cli.sh release` to automatically create a tag for the repo and add it in the readme.txt and the main plugin file.
 
-Publishing to the Wordpress plugin repository will be done by `./cli.sh publish` , which can be run in a jenkins build.
+Publishing to the Wordpress plugin repository will be done by `./cli.sh publish`.
+
+To trigger a Jenkins build you can use `./cli.sh trigger`.
 
 ## .env
 
