@@ -52,7 +52,7 @@ rm -fR "$PLUGIN"
 mkdir "$PLUGIN"
 
 # Copy the plugin file
-SOURCE="$PROJECT/../src/*"
+SOURCE="$PROJECT/src/*"
 DEST="./$PLUGIN"
 cp -r $SOURCE $DEST
 
