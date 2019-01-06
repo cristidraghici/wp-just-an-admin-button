@@ -8,20 +8,12 @@ pipeline {
   stages {
     stage('Release') {
       steps {
-        git(url: 'https://github.com/cristidraghici/wp-just-an-admin-button', branch: 'master')
-        dir(path: 'wp-just-an-admin-button') {
-          powershell(script: './cli.sh release minor', returnStdout: true)
-        }
-
+        powershell(script: './cli.sh release minor', returnStdout: true)
       }
     }
     stage('Publish') {
       steps {
-        git(url: 'https://github.com/cristidraghici/wp-just-an-admin-button', branch: 'master')
-        dir(path: 'wp-just-an-admin-button') {
-          powershell(script: './cli.sh publish', returnStdout: true)
-        }
-
+        powershell(script: './cli.sh publish', returnStdout: true)
       }
     }
   }
