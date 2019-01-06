@@ -5,7 +5,7 @@ defined('ABSPATH') or die('You shall not pass!');
 Plugin Name: Just an admin button
 Description: This plugin will hide the admin bar and just display a button to it.
 Author: Cristi DRAGHICI
-Version: 1.1.5
+Version: 1.1.6
 Author URI: http://www.draghici.net
 License: GPLv3 or later
 */
