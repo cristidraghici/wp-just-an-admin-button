@@ -8,10 +8,14 @@ pipeline {
     }
   }
 
+  environment {
+    BRANCH="${env.BRANCH_NAME}"
+  }
+
   stages {
     stage('Prepare') {
       steps {
-        if (env.BRANCH_NAME != 'master') {
+        if (BRANCH != 'master') {
           echo 'Branch must be master for build to work.';
           exit 1;
         }
