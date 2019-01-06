@@ -3,6 +3,17 @@
 # Exit if script is run directly
 if [ -z ${PROJECT+x} ]; then exit; fi
 
+# Always release from linux
+if [[ $OS == 'Darwin' ]]; then
+  echo -e ""
+  echo -e "\033[0;31m> Please use the container to run this command.";
+  echo -e "> Get in with:"
+  echo -e ""
+  echo -e "  docker exec -it wp-jaab-publisher /bin/bash"
+  echo -e ""
+  exit;
+fi
+
 # Intro on the function of the file
 echo "Publishing the new release to the Wordpress plugin repository.."
 
@@ -26,15 +37,15 @@ if [[ -z "$VERSION" ]]; then
 	VERSION="0.0.1"
 fi
 
-# # Check if the tag exists for the version we are building
-# TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")
-# error=$?
-# if [ $error == 0 ]; then
-#   # Tag exists, don't deploy
-#   echo "> Tag already exists for version $VERSION, aborting deployment";
-#   echo '> Aborting..';
-#   exit 1
-# fi
+# Check if the tag exists for the version we are building
+TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")
+error=$?
+if [ $error == 0 ]; then
+  # Tag exists, don't deploy
+  echo "> Tag already exists for version $VERSION, aborting deployment";
+  echo '> Aborting..';
+  exit 1
+fi
 
 # Clean and set the workdir/build directory
 NEW_PLUGIN_SRC="$PROJECT/src"
@@ -58,12 +69,13 @@ mv "$SVN_PATH/trunk" "$WORK_DIR_PATH/svn-trunk"
 
 # Make the necessary changes
 ## new trunk
-mv "$PLUGIN_PATH" "$SVN_PATH/trunk"
+mv "$PLUGIN_PATH/src" "$SVN_PATH/trunk"
 ## new assets
 rm -fR "$SVN_PATH/assets"
 mv "$SVN_PATH/trunk/assets" "$SVN_PATH"
 ## new tag
-cp -r "$SVN_PATH/trunk" "$SVN_PATH/tags/$VERSION"
+rm -fR "$SVN_PATH/tags/$VERSION"
+cp -r "$SVN_PATH/trunk/" "$SVN_PATH/tags/$VERSION"
 
 # Copy all the .svn folders from the checked out copy of trunk to the new trunk
 cd "$WORK_DIR_PATH/svn-trunk"

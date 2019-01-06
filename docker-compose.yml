@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  wordpress:
+    build: ./docker/wordpress
+    container_name: 'wp-jaab-wordpress'
+    env_file: .env
+    restart: always
+    volumes:
+      - ./docker/wordpress/public_html:/var/www/html
+      - ./src:/var/www/html/wp-content/plugins/wp-just-an-admin-button
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+
+  db:
+    build: ./docker/mariadb
+    container_name: 'wp-jaab-db'
+    env_file: .env
+    restart: always
+    volumes:
+      - ./docker/mariadb/data:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+
+  publisher:
+    build: ./docker
+    container_name: 'wp-jaab-publisher'
+    env_file: .env
+    command: sh
+    tty: true
+    volumes:
+      - ./:/plugin

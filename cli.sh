@@ -4,7 +4,7 @@
 OS="$(echo -e `uname`)"
 if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
   echo -e ""
-  echo -e "\033[0;31m Your operating system is not supported.";
+  echo -e "\033[0;31m Your operating system ($OS) is not supported.";
   echo -e ""
   exit;
 fi
@@ -52,6 +52,9 @@ function replace_text_in_file {
 
 # Include .env if it exists
 ENV="$PROJECT/.env"
+# if [[ ! $(file_exists "$ENV") ]] && [[ $(file_exists "$ENV.example") ]]; then
+#   cp "$ENV.example" "$ENV"
+# fi
 export $(grep -v '^#' $ENV | xargs)  > /dev/null 2>&1
 
 # Get which script to execute
