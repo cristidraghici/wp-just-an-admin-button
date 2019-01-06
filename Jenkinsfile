@@ -57,7 +57,7 @@ pipeline {
     stage('Publish') {
       steps {
         script {
-          . "./cli.sh publish"
+          sh "./cli.sh publish"
         }
       }
     }
