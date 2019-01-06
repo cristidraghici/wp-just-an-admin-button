@@ -42,9 +42,9 @@ realpath() {
 }
 
 NEW_PLUGIN_SRC=$(realpath "$PROJECT/src/")
-WORK_DIR_PATH=$(realpath "$PROJECT/$WORK_DIR")
-PLUGIN_PATH=$(realpath "$PROJECT/$WORK_DIR/$PLUGIN")
-SVN_PATH=$(realpath "$PROJECT/$WORK_DIR/svn")
+WORK_DIR_PATH=$(realpath "$PROJECT/$WORK_DIR/")
+PLUGIN_PATH=$(realpath "$PROJECT/$WORK_DIR/$PLUGIN/")
+SVN_PATH=$(realpath "$PROJECT/$WORK_DIR/svn/")
 
 rm -fR "$WORK_DIR_PATH"
 
@@ -66,8 +66,8 @@ mv "$PLUGIN_PATH" "$SVN_PATH/trunk"
 ## new assets
 mv "$SVN_PATH/trunk/assets" "$SVN_PATH/assets"
 ## new tag
-mkdir -p "$SVN_PATH/trunk/tags/$VERSION"
-cp "$SVN_PATH/trunk/" "$SVN_PATH/trunk/tags/$VERSION"
+mkdir -p "$SVN_PATH/tags/$VERSION"
+cp "$SVN_PATH/trunk/" "$SVN_PATH/tags/$VERSION"
 
 # Copy all the .svn folders from the checked out copy of trunk to the new trunk
 cd "$WORK_DIR_PATH/svn-trunk"
