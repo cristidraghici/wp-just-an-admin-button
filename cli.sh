@@ -10,10 +10,7 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-PROJECT=''
-if [[ $OS == 'Darwin' ]]; then
-  PROJECT='.';
-fi
+PROJECT='.';
 
 #
 # Execute a given script
