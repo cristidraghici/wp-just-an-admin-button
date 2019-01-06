@@ -4,8 +4,8 @@ pipeline {
       filename './docker/Dockerfile'
       label 'builder'
     }
-
   }
+
   stages {
     stage('Release') {
       parallel {
@@ -21,7 +21,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: './cli.sh release patch', returnStdout: true)
+            sh(script: "${PWD}/cli.sh release patch", returnStdout: true)
           }
         }
         stage('minor') {
@@ -31,7 +31,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: './cli.sh release minor', returnStdout: true)
+            sh(script: "${PWD}/cli.sh release minor", returnStdout: true)
           }
         }
         stage('major') {
@@ -41,16 +41,18 @@ pipeline {
             }
           }
           steps {
-            sh(script: './cli.sh release major', returnStdout: true)
+            sh(script: "${PWD}/cli.sh release major", returnStdout: true)
           }
         }
       }
     }
+
     stage('Publish') {
       steps {
-        sh(script: './cli.sh publish', returnStdout: true)
+        sh(script: "${PWD}/cli.sh publish", returnStdout: true)
       }
     }
+
     stage('Finish') {
       steps {
         echo 'Operation completed...'
