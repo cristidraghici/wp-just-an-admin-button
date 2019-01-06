@@ -9,8 +9,8 @@ pipeline {
   }
 
   environment {
-    WP_ORG_USERNAME=`echo $WP_ORG_USERNAME`
-    WP_ORG_PASSWORD=`echo $WP_ORG_PASSWORD`
+    WP_ORG_USERNAME="$WP_ORG_USERNAME"
+    WP_ORG_PASSWORD="$WP_ORG_PASSWORD"
   }
 
   stages {
