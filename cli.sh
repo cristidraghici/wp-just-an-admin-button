@@ -10,11 +10,9 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-if [[ $OS == 'Linux']]; then
-  PROJECT=''
-fi
-if [[ $OS == 'Darwin']]; then
-  PROJECT='.'
+PROJECT=''
+if [[ $OS == 'Darwin' ]]; then
+  PROJECT='.';
 fi
 
 #
