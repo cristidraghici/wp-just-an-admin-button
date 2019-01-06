@@ -5,6 +5,9 @@ pipeline {
       label 'builder'
     }
   }
+  environment {
+    WORK_DIR="${BASH_SOURCE%/*}"
+  }
 
   stages {
     stage('Release') {
@@ -21,7 +24,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PWD}/cli.sh release patch", returnStdout: true)
+            sh(script: "${WORK_DIR}/cli.sh release patch", returnStdout: true)
           }
         }
         stage('minor') {
@@ -31,7 +34,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PWD}/cli.sh release minor", returnStdout: true)
+            sh(script: "${WORK_DIR}/cli.sh release minor", returnStdout: true)
           }
         }
         stage('major') {
@@ -41,7 +44,7 @@ pipeline {
             }
           }
           steps {
-            sh(script: "${PWD}/cli.sh release major", returnStdout: true)
+            sh(script: "${WORK_DIR}/cli.sh release major", returnStdout: true)
           }
         }
       }
@@ -49,7 +52,7 @@ pipeline {
 
     stage('Publish') {
       steps {
-        sh(script: "${PWD}/cli.sh publish", returnStdout: true)
+        sh(script: "${WORK_DIR}/cli.sh publish", returnStdout: true)
       }
     }
 
