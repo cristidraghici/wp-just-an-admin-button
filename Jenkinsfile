@@ -11,15 +11,13 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        checkout scm
-        sh "chmod +x ./cli.sh"
-      }
-
-      steps {
         if (env.BRANCH_NAME != 'master') {
           echo 'Branch must be master for build to work.';
           exit 1;
         }
+
+        checkout scm
+        sh "chmod +x ./cli.sh"
       }
     }
 
