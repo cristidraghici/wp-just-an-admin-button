@@ -56,6 +56,8 @@ pipeline {
 
     stage('Publish') {
       steps {
+        checkout scm
+
         script {
           sh "./cli.sh publish"
         }

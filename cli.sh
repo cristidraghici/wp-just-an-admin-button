@@ -10,7 +10,8 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-PROJECT="./"
+PROJECT="${BASH_SOURCE%/*}"
+if [ -z ${PROJECT+x} ]; then PROJECT="$PWD"; fi
 
 #
 # Execute a given script
