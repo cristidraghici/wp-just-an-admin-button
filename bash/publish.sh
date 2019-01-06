@@ -19,12 +19,13 @@ if [[ -z "$WP_ORG_USERNAME" ]] || [[ -z "$WP_ORG_PASSWORD" ]]; then
   echo "> Aborting.."
 	exit 1;
 fi
-
+ls -la
 # Get the current version
 VERSION="$(git describe | cut -c 2-6)"
 
 # # Check if the tag exists for the version we are building
 TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")
+echo $TAG;
 error=$?
 if [ $error == 0 ]; then
   # Tag exists, don't deploy
@@ -32,6 +33,8 @@ if [ $error == 0 ]; then
   echo '> Aborting..';
   exit 1
 fi
+
+ls -la
 
 # Clean and set the workdir/build directory
 WORK_DIR_PATH="$PROJECT/$WORK_DIR"

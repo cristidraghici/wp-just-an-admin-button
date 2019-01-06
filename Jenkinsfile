@@ -55,20 +55,23 @@ pipeline {
         }
       }
     }
+
     stage('Publish') {
       steps {
+        checkout scm
+        sh 'cp .env.example .env'
+        sh 'chmod +x ./cli.sh'
+
         withCredentials(bindings: [
                     string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'),
                     string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
                   ]) {
-            checkout scm
-            sh 'cp .env.example .env'
-            sh 'chmod +x ./cli.sh'
             sh './cli.sh publish'
           }
 
         }
       }
+
       stage('Finish') {
         steps {
           echo 'Operation completed...'
