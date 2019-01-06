@@ -67,7 +67,7 @@ mv svn/trunk ./svn-trunk
 # Create trunk directory
 mkdir svn/trunk
 # Copy our new version of the plugin into trunk
-rsync -r -p $PLUGIN/* svn/trunk
+cp -pur $PLUGIN/* svn/trunk
 
 # Copy all the .svn folders from the checked out copy of trunk to the new trunk.
 # This is necessary as the Travis container runs Subversion 1.6 which has .svn dirs in every sub dir
@@ -96,7 +96,7 @@ rm -fR svn-trunk
 
 # Add new version tag
 mkdir svn/tags/$VERSION
-rsync -r -p $PLUGIN/* svn/tags/$VERSION
+cp -pur $PLUGIN/* svn/tags/$VERSION
 
 # Add new files to SVN
 svn stat svn | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
