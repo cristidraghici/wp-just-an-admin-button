@@ -50,6 +50,9 @@ function replace_text_in_file {
   sed -i "" "s/${search}/${replace}/g" "${file}";
 }
 
+echo $PATH
+ls -la
+
 # Include .env if it exists
 ENV="$PROJECT/.env"
 export $(grep -v '^#' $ENV | xargs)  > /dev/null 2>&1

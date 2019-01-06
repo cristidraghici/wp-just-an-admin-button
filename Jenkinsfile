@@ -69,12 +69,11 @@ pipeline {
 
     stage('Publish') {
       steps {
-        checkout scm
-
         withCredentials([
           string(credentialsId: 'WP_ORG_USERNAME', variable: 'WP_ORG_USERNAME'),
           string(credentialsId: 'WP_ORG_PASSWORD', variable: 'WP_ORG_PASSWORD')
         ]) {
+          checkout scm
           sh "./cli.sh publish"
         }
       }
