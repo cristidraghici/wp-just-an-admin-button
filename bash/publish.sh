@@ -51,6 +51,7 @@ svn co -q "http://svn.wp-plugins.org/$PLUGIN" "$SVN_PATH" || default_error
 
 # Copy the plugin files
 cp -r "$NEW_PLUGIN_SRC" "$PLUGIN_PATH"
+ls -la
 
 # Move out the trunk directory to a temp location
 mv "$SVN_PATH/trunk" "$WORK_DIR_PATH/svn-trunk"
