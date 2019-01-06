@@ -10,7 +10,7 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-PROJECT=$PWD
+PROJECT=''
 
 #
 # Execute a given script
