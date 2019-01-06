@@ -1,9 +1,7 @@
-FROM alpine:3.6
+FROM ubuntu:latest
 
 # SVN & Git installation
-RUN apk add --no-cache subversion && \
-    apk add --no-cache git && \
-    apk add --no-cache bash
+RUN apt-get install subversion && apt-get install git
 
 # Set the workdir
 RUN mkdir -p /app
