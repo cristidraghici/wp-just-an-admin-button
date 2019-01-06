@@ -27,14 +27,14 @@ if [[ -z "$VERSION" ]]; then
 fi
 
 # # Check if the tag exists for the version we are building
-TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")
-error=$?
-if [ $error == 0 ]; then
-  # Tag exists, don't deploy
-  echo "> Tag already exists for version $VERSION, aborting deployment";
-  echo '> Aborting..';
-  exit 1
-fi
+# TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$VERSION")
+# error=$?
+# if [ $error == 0 ]; then
+#   # Tag exists, don't deploy
+#   echo "> Tag already exists for version $VERSION, aborting deployment";
+#   echo '> Aborting..';
+#   exit 1
+# fi
 
 # Clean and set the workdir/build directory
 NEW_PLUGIN_SRC="$PROJECT/src"
@@ -54,13 +54,14 @@ cp -r "$NEW_PLUGIN_SRC/" "$PLUGIN_PATH"
 svn co -q "http://svn.wp-plugins.org/$PLUGIN" "$SVN_PATH" || default_error
 
 # Move out the trunk directory to a temp location
-mv "$SVN_PATH/trunk/" "$WORK_DIR_PATH/svn-trunk"
+mv "$SVN_PATH/trunk" "$WORK_DIR_PATH/svn-trunk"
 
 # Make the necessary changes
 ## new trunk
 mv "$PLUGIN_PATH" "$SVN_PATH/trunk"
 ## new assets
-mv "$SVN_PATH/trunk/assets/" "$SVN_PATH"
+rm -fR "$SVN_PATH/assets"
+mv "$SVN_PATH/trunk/assets" "$SVN_PATH"
 ## new tag
 cp -r "$SVN_PATH/trunk" "$SVN_PATH/tags/$VERSION"
 
