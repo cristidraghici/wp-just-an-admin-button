@@ -18,7 +18,7 @@ pipeline {
         if (BRANCH != 'master') {
           echo 'Branch must be master for build to work.';
           exit 1;
-        }
+        } else {}
 
         checkout scm
         sh "chmod +x ./cli.sh"
