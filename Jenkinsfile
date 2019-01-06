@@ -10,12 +10,10 @@ pipeline {
 
   stages {
     stage('Prepare') {
-      parallel {
-        stage('info') {
-          steps {
-            echo "Branch check is done in the scripts run."
-            echo "To save resources, this should be moved to jenkins"
-          }
+      stage('info') {
+        steps {
+          echo "Branch check is done in the scripts run."
+          echo "To save resources, this should be moved to jenkins"
         }
       }
     }
