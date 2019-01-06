@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        sh "checkout scm"
+        checkout scm
         sh "chmod +x ./cli.sh"
       }
     }
