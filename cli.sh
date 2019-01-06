@@ -10,13 +10,17 @@ if [[ $OS != 'Linux' && $OS != 'Darwin' ]]; then
 fi
 
 # Set the current path
-PROJECT='.'
+if [[ $OS == 'Linux']]; then
+  PROJECT=''
+fi
+if [[ $OS == 'Darwin']]; then
+  PROJECT='.'
+fi
 
 #
 # Execute a given script
 #
-
-# Check file existence helper
+# Check existence helper
 function file_exists {
 	if [ -f "$1" ]; then
 		# exists
@@ -53,9 +57,7 @@ function replace_text_in_file {
 
 # Include .env if it exists
 ENV="$PROJECT/.env"
-if [[ $(file_exists "$ENV") ]]; then
-  export $(grep -v '^#' $ENV | xargs)  > /dev/null 2>&1
-fi
+export $(grep -v '^#' $ENV | xargs)  > /dev/null 2>&1
 
 # Get which script to execute
 CURRENT_SCRIPT="$1"
