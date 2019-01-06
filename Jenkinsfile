@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Prepare') {
       steps {
-        sh "chmod +x ${WORKSPACE}/cli.sh"
+        sh "chmod +x ../cli.sh"
       }
     }
 
@@ -27,7 +27,7 @@ pipeline {
             }
           }
           steps {
-            sh  "./cli.sh release patch"
+            sh  "../cli.sh release patch"
           }
         }
         stage('minor') {
@@ -37,7 +37,7 @@ pipeline {
             }
           }
           steps {
-            sh  "./cli.sh release minor"
+            sh  "../cli.sh release minor"
           }
         }
         stage('major') {
@@ -47,7 +47,7 @@ pipeline {
             }
           }
           steps {
-            sh  "./cli.sh release major"
+            sh  "../cli.sh release major"
           }
         }
       }
@@ -55,7 +55,7 @@ pipeline {
 
     stage('Publish') {
       steps {
-        sh  "./cli.sh publish"
+        sh  "../cli.sh publish"
       }
     }
 
