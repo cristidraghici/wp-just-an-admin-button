@@ -14,6 +14,6 @@ RUN apt-get update \
 
 EXPOSE 80
 
-CMD ['echo', 'Welcome!']
+CMD ["echo", "Welcome!"]
 
 RUN exec $@
