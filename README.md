@@ -2,7 +2,7 @@
 
 Replaces the administration toolbar with a button leading to the administration section.
 
-Current version: 1.2.1
+Current version: ..1.2.1
 
 Note: Installing from github.com, **could result in an error** when trying to activate the plugin. This happens because the plugin is designed to be installed from WP plugin repository and not by downloading it from github. The fix: just go to plugins in the admin dashboard and activate/update the plugin.
 
