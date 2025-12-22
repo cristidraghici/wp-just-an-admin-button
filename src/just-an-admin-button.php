@@ -12,7 +12,12 @@ License: GPLv3 or later
 
 /** line-used-to-generate-placeholder-entry-file */
 function jaab_enqueue_styles() {
-	wp_enqueue_style( 'just-an-admin-button-css', plugins_url( 'style.css' , __FILE__ ) );
+	wp_enqueue_style(
+		'just-an-admin-button-css',
+		plugin_dir_url( __FILE__ ) . 'style.css',
+		[],
+		filemtime( plugin_dir_path( __FILE__ ) . 'style.css' )
+	);
 }
 add_action( 'wp_enqueue_scripts', 'jaab_enqueue_styles' );
 

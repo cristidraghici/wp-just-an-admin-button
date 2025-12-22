@@ -15,9 +15,6 @@ jobs:
   deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    
-    env:
-      PLUGIN_SLUG: just-an-admin-button
 
     steps:
       - name: Checkout Code

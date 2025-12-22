@@ -2,7 +2,6 @@ services:
   wordpress:
     image: wordpress:latest
     container_name: 'wp-jaab-wordpress'
-    env_file: .env
     restart: always
     volumes:
       - ./.data/wordpress:/var/www/html
@@ -20,7 +19,6 @@ services:
   db:
     image: mariadb:latest
     container_name: 'wp-jaab-db'
-    env_file: .env
     restart: always
     volumes:
       - ./.data/mariadb:/var/lib/mysql
@@ -30,7 +28,6 @@ services:
   publisher:
     build: .
     container_name: 'wp-jaab-publisher'
-    env_file: .env
     command: sh
     tty: true
     volumes:
