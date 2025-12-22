@@ -47,8 +47,13 @@ jobs:
           # Update version to match the release tag
           sed -i "s/Version: .*/Version: $VERSION/" plugin.php
           
+          # Get latest WordPress version
+          WP_LATEST=$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].current')
+          echo "Updated Tested up to version to $WP_LATEST"
+
           # Update version in readme.txt
           sed -i "s/Stable tag: .*/Stable tag: $VERSION/" src/readme.txt
+          sed -i "s/Tested up to: .*/Tested up to: $WP_LATEST/" src/readme.txt
 
           # Update version in the main plugin file
           sed -i "s/Version: .*/Version: $VERSION/" src/just-an-admin-button.php

@@ -2,7 +2,7 @@
 Contributors: cristidraghici
 Tags: hidden admin toolbar, hide administration toolbar
 Requires at least: 3.7
-Tested up to: 5.0.2
+Tested up to: 0.0.0
 Stable tag: 0.0.0
 License: GPLv3 or later
 
