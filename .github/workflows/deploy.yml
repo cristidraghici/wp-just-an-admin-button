@@ -50,6 +50,9 @@ jobs:
           # Update version in readme.txt
           sed -i "s/Stable tag: .*/Stable tag: $VERSION/" src/readme.txt
 
+          # Update version in the main plugin file
+          sed -i "s/Version: .*/Version: $VERSION/" src/just-an-admin-button.php
+
       - name: Create Plugin Zip
         run: |
           zip -r just-an-admin-button.zip plugin.php src/
