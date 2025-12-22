@@ -3,8 +3,9 @@
 # Exit if script is run directly
 if [ -z ${PROJECT+x} ]; then exit; fi
 
-# Always release from linux
-if [[ $OS == 'Darwin' ]]; then
+# Always release from linux, preferably from the container
+OS=$(uname)
+if [[ $OS != 'Linux' ]]; then
   echo -e ""
   echo -e "\033[0;31m> Please use the container to run this command.";
   echo -e "> Get in with:"

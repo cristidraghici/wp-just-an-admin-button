@@ -1,4 +1,3 @@
+.DS_Store
 .env
 build
-docker/mariadb/data
-docker/wordpress/public_html

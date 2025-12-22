@@ -1,0 +1,124 @@
+name: Deploy to WordPress.org and Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g. 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    env:
+      PLUGIN_SLUG: just-an-admin-button
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Get Version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+          else
+            echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+          fi
+
+      - name: Generate plugin.php Shim
+        run: |
+          # Copy source file to plugin.php
+          cp src/just-an-admin-button.php plugin.php
+          
+          # Remove everything after the placeholder line
+          sed -i '/line-used-to-generate-placeholder-entry-file.*/,$ d' plugin.php
+          
+          # Add the include statement
+          echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>" >> plugin.php
+          
+          # Update version to match the release tag
+          sed -i "s/Version: .*/Version: $VERSION/" plugin.php
+
+      - name: Create Plugin Zip
+        run: |
+          zip -r just-an-admin-button.zip plugin.php src/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: just-an-admin-button.zip
+          tag_name: v${{ env.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to WordPress.org SVN
+        env:
+          WP_ORG_USERNAME: ${{ secrets.WP_ORG_USERNAME }}
+          WP_ORG_PASSWORD: ${{ secrets.WP_ORG_PASSWORD }}
+        run: |
+          # Setup variables
+          SVN_SLUG="just-an-admin-button" 
+          SVN_URL="http://svn.wp-plugins.org/$SVN_SLUG"
+          SVN_DIR="${{ runner.temp }}/svn-repo"
+          VERSION="$VERSION"
+          
+          echo "Deploying version $VERSION to $SVN_URL..."
+          
+          # Install SVN
+          sudo apt-get update && sudo apt-get install -y subversion
+          
+          # Check if SVN tag already exists
+          if svn ls "$SVN_URL/tags/$VERSION" > /dev/null 2>&1; then
+            echo "Tag $VERSION already exists on WordPress.org. Skipping deployment."
+            exit 0
+          fi
+          
+          # Checkout SVN Repo
+          echo "Checking out SVN repository..."
+          svn co -q "$SVN_URL" "$SVN_DIR"
+          
+          # Sync files to trunk
+          # We map 'src/' to 'trunk/'
+          echo "Syncing src/ to trunk/..."
+          
+          # Ensure trunk exists
+          mkdir -p "$SVN_DIR/trunk"
+          
+          # Sync content using rsync
+          # Exclude .svn, .git, etc
+          rsync -rca --delete --exclude ".svn" src/ "$SVN_DIR/trunk/"
+          
+          # Handle Assets
+          # Move assets from trunk/assets to root assets if they exist
+          if [ -d "$SVN_DIR/trunk/assets" ]; then
+            echo "Moving assets to root..."
+            mkdir -p "$SVN_DIR/assets"
+            rsync -rca --delete --exclude ".svn" "$SVN_DIR/trunk/assets/" "$SVN_DIR/assets/"
+            rm -rf "$SVN_DIR/trunk/assets"
+          fi
+          
+          # SVN Operations
+          cd "$SVN_DIR"
+          
+          # Add new files
+          svn add --force .
+          
+          # Remove deleted files
+          svn status | grep '^\!' | awk '{print $2}' | xargs -r svn rm
+          
+          # Create Tag
+          echo "Creating tag $VERSION..."
+          svn cp trunk "tags/$VERSION"
+          
+          # Commit
+          echo "Committing to WordPress.org..."
+          svn ci --no-auth-cache --username "$WP_ORG_USERNAME" --password "$WP_ORG_PASSWORD" -m "Deploy version $VERSION"
+          
+          echo "Deployment successful!"
