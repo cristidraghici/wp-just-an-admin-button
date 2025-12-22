@@ -43,8 +43,12 @@ jobs:
           # Add the include statement
           echo "include( plugin_dir_path( __FILE__ ) . 'src/just-an-admin-button.php'); ?>" >> plugin.php
           
+
           # Update version to match the release tag
           sed -i "s/Version: .*/Version: $VERSION/" plugin.php
+          
+          # Update version in readme.txt
+          sed -i "s/Stable tag: .*/Stable tag: $VERSION/" src/readme.txt
 
       - name: Create Plugin Zip
         run: |
