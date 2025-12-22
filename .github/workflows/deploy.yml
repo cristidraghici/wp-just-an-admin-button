@@ -1,4 +1,4 @@
-name: Deploy to WordPress.org and Create Release
+name: Deploy 
 
 on:
   push:
@@ -6,10 +6,15 @@ on:
       - 'v*'
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to deploy (e.g. 1.2.3)'
+      version_type:
+        description: 'Version type to increment (major, minor, patch)'
         required: true
-        type: string
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
 jobs:
   deploy:
@@ -19,12 +24,47 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get Version
         id: get_version
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+            # Get latest tag, assume sortable by version sort (-V)
+            LATEST_TAG=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
+            
+            if [ -z "$LATEST_TAG" ]; then
+              LATEST_TAG="v0.0.0"
+            fi
+            
+            echo "Latest tag found: $LATEST_TAG"
+            
+            # Remove 'v' prefix
+            CURRENT_VERSION=${LATEST_TAG#v}
+            
+            # Split into array
+            IFS='.' read -r -a parts <<< "$CURRENT_VERSION"
+            major=${parts[0]}
+            minor=${parts[1]}
+            patch=${parts[2]}
+            
+            TYPE="${{ inputs.version_type }}"
+            
+            if [ "$TYPE" == "major" ]; then
+              major=$((major + 1))
+              minor=0
+              patch=0
+            elif [ "$TYPE" == "minor" ]; then
+              minor=$((minor + 1))
+              patch=0
+            else
+              patch=$((patch + 1))
+            fi
+            
+            NEW_VERSION="$major.$minor.$patch"
+            echo "Calculated next version: $NEW_VERSION"
+            echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
           else
             echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           fi

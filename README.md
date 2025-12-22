@@ -17,3 +17,11 @@ For developing, you can use `docker-compose`:
 3. Install the wordpress instance which will be available for you from that point on.
 
 Only basic stuff was necessary for the WP installation.
+
+## Git Hooks
+
+This project uses git hooks to enforce semantic versioning for tags (e.g., `v1.2.3`). To enable these hooks locally, run:
+
+```bash
+git config core.hooksPath .githooks
+```
