@@ -64,12 +64,14 @@ jobs:
             
             NEW_VERSION="$major.$minor.$patch"
             echo "Calculated next version: $NEW_VERSION"
-            echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
+            echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
           else
-            echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Generate plugin.php Shim
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
         run: |
           # Copy source file to plugin.php
           cp src/just-an-admin-button.php plugin.php
@@ -103,7 +105,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: just-an-admin-button.zip
-          tag_name: v${{ env.VERSION }}
+          tag_name: v${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -111,12 +113,12 @@ jobs:
         env:
           WP_ORG_USERNAME: ${{ secrets.WP_ORG_USERNAME }}
           WP_ORG_PASSWORD: ${{ secrets.WP_ORG_PASSWORD }}
+          VERSION: ${{ steps.get_version.outputs.version }}
         run: |
           # Setup variables
           SVN_SLUG="just-an-admin-button" 
           SVN_URL="http://svn.wp-plugins.org/$SVN_SLUG"
           SVN_DIR="${{ runner.temp }}/svn-repo"
-          VERSION="$VERSION"
           
           echo "Deploying version $VERSION to $SVN_URL..."
           

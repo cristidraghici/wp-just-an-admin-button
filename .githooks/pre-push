@@ -6,7 +6,7 @@ regex="^v[0-9]+\.[0-9]+\.[0-9]+$"
 
 z40=0000000000000000000000000000000000000000
 
-while read local_ref local_sha remote_ref remote_sha
+while read -r _ local_sha remote_ref _
 do
 	# Only check tags
 	if [[ "$remote_ref" == refs/tags/* ]]; then
